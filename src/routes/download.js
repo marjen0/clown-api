@@ -1,6 +1,7 @@
-const express = require('express');
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
+const express = require('express');
+const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const {
   generateLaunchIcons,
@@ -12,6 +13,35 @@ const {
 const archiver = require('archiver');
 
 const router = express.Router({ mergeParams: true });
+
+const DIR = '../../public';
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, DIR);
+  },
+  filename: (req, file, cb) => {
+    console.log('here');
+    const fileName = file.originalname.toLowerCase().split(' ').join('-');
+    cb(null, `${uuidv4()} + '-' + ${fileName}`);
+  },
+});
+
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    if (
+      file.mimetype === 'image/png' ||
+      file.mimetype === 'image/jpg' ||
+      file.mimetype === 'image/jpeg'
+    ) {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+    }
+  },
+});
 
 const zipDirectory = async (source, dest) => {
   const stream = fs.createWriteStream(dest);
@@ -44,7 +74,7 @@ const download = (res, filePath) =>
     });
   });
 
-router.get('/', async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
   const { type } = req.query;
   const uuid = uuidv4();
   const generatedPathZip = `/Users/marijus/Documents/clown-api/src/files/output/${type}.zip`;
@@ -54,8 +84,8 @@ router.get('/', async (req, res) => {
     output: '/Users/marijus/Documents/clown-api/src/files/output',
     platforms: [platforms.ANDROID, platforms.IOS, platforms.ANDROIDTV],
   };
-
-  switch (type) {
+  return res.status(200).json({ msg: 'ok' });
+  /* switch (type) {
     case assetTypes.SPLASHSCREEN.name:
       await generateSplashScreens(options);
       await zipDirectory(generatedPath, generatedPathZip);
@@ -67,8 +97,8 @@ router.get('/', async (req, res) => {
       await generateLaunchIcons(options);
       await zipDirectory(generatedPath, generatedPathZip);
       await download(res, generatedPathZip);
-      //fs.rmSync(generatedPathZip);
-      //fs.rmSync(generatedPath, { recursive: true, force: true });
+      // fs.rmSync(generatedPathZip);
+      // fs.rmSync(generatedPath, { recursive: true, force: true });
       break;
     case assetTypes.FAVICON.name:
       await generateFavicons(options);
@@ -80,7 +110,7 @@ router.get('/', async (req, res) => {
     default:
       res.status(400).json({ error: 'bad asset type' });
       break;
-  }
+  }*/
 });
 
 module.exports = router;

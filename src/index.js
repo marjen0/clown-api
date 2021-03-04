@@ -10,6 +10,11 @@ app.use(express.static(__dirname));
 app.use(cors());
 app.use(express());
 
+app.use((err, req, res, next) => {
+  console.error(err.message);
+  res.status(err.statusCode).send(err.message);
+});
+
 app.use('/download', downloadRoutes);
 
 app.listen(PORT, () => {
