@@ -21,8 +21,7 @@ const storage = multer.diskStorage({
     cb(null, DIR);
   },
   filename: (req, file, cb) => {
-    const fileName = file.originalname.toLowerCase().split(' ').join('-');
-    cb(null, `${uuidv4()} + '-' + ${fileName}`);
+    cb(null, `${uuidv4()}`);
   },
 });
 
@@ -90,6 +89,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       await download(res, generatedPathZip);
       //fs.rmSync(generatedPathZip);
       //fs.rmSync(generatedPath, { recursive: true, force: true });
+      fs.rmSync(req.file.path);
       break;
     case assetTypes.LAUNCHICON.name:
       await generateLaunchIcons(options);
