@@ -75,22 +75,21 @@ const download = (res, filePath) =>
 
 router.post('/', upload.single('image'), async (req, res) => {
   const { type } = req.query;
-  const uuid = uuidv4();
-  const generatedPathZip = `/Users/marijus/Documents/clown-api/src/files/output/${type}.zip`;
-  const generatedPath = `/Users/marijus/Documents/clown-api/src/files/output/${type}`;
+  const generatedPathZip = `/Users/marijus/Documents/clown-api/outputs${type}.zip`;
+  const generatedPath = `/Users/marijus/Documents/clown-api/outputs/${type}`;
   const options = {
-    source: '/Users/marijus/Desktop/base.png',
-    output: '/Users/marijus/Documents/clown-api/src/files/output',
+    source: req.file.path,
+    output: path.join(__dirname, '../../outputs'),
     platforms: [platforms.ANDROID, platforms.IOS, platforms.ANDROIDTV],
   };
-  return res.status(200).json({ msg: 'ok' });
-  /* switch (type) {
+  console.log(req);
+  switch (type) {
     case assetTypes.SPLASHSCREEN.name:
       await generateSplashScreens(options);
       await zipDirectory(generatedPath, generatedPathZip);
       await download(res, generatedPathZip);
-      fs.rmSync(generatedPathZip);
-      fs.rmSync(generatedPath, { recursive: true, force: true });
+      //fs.rmSync(generatedPathZip);
+      //fs.rmSync(generatedPath, { recursive: true, force: true });
       break;
     case assetTypes.LAUNCHICON.name:
       await generateLaunchIcons(options);
@@ -103,13 +102,13 @@ router.post('/', upload.single('image'), async (req, res) => {
       await generateFavicons(options);
       await zipDirectory(generatedPath, generatedPathZip);
       await download(res, generatedPathZip);
-      fs.rmSync(generatedPathZip);
-      fs.rmSync(generatedPath, { recursive: true, force: true });
+      //fs.rmSync(generatedPathZip);
+      //fs.rmSync(generatedPath, { recursive: true, force: true });
       break;
     default:
       res.status(400).json({ error: 'bad asset type' });
       break;
-  }*/
+  }
 });
 
 module.exports = router;
