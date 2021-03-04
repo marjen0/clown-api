@@ -11,7 +11,7 @@ const extractCornerColor = (jimpImage) => {
 const resize = (sharpImage, jimpImage, width, height, round = false) => {
   const { r, g, b } = extractCornerColor(jimpImage);
   let img;
-  img = sharpImage.resize(width, height, {
+  img = sharpImage.removeAlpha().resize(width, height, {
     fit: 'contain',
     background: { r, g, b },
   });

@@ -17,6 +17,20 @@ const launchIcons = [
     density: 'mdpi',
     platform: ANDROIDTV,
   },
+  {
+    name: 'banner',
+    dirName: 'drawable',
+    dimensions: '1280x720',
+    density: 'mdpi',
+    platform: ANDROIDTV,
+  },
+  {
+    name: 'banner2',
+    dirName: 'drawable',
+    dimensions: '320x180',
+    density: 'mdpi',
+    platform: ANDROIDTV,
+  },
 ];
 
 module.exports = launchIcons;

@@ -3586,6 +3586,20 @@ clone@^1.0.2:
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
   integrity sha1-2jCcwmPfFZlMaIypAheco8fNfH4=
 
+"clown@git+https://github.com/marjen0/clown-cli.git":
+  version "1.0.0"
+  resolved "git+https://github.com/marjen0/clown-cli.git#7f6e5c40068a74911c9c690c28706b037e9d385c"
+  dependencies:
+    archiver "^5.2.0"
+    chalk "^4.1.0"
+    commander "^7.0.0"
+    cors "^2.8.5"
+    express "^4.17.1"
+    inquirer "^7.3.3"
+    inquirer-path "^1.0.0-beta5"
+    jimp "^0.16.1"
+    sharp "^0.27.1"
+
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"

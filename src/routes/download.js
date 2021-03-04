@@ -8,7 +8,7 @@ const {
   generateFavicons,
   assetTypes,
   platforms,
-} = require('@marijus/clown-cli');
+} = require('clown');
 const archiver = require('archiver');
 
 const router = express.Router({ mergeParams: true });
@@ -67,8 +67,8 @@ router.get('/', async (req, res) => {
       await generateLaunchIcons(options);
       await zipDirectory(generatedPath, generatedPathZip);
       await download(res, generatedPathZip);
-      fs.rmSync(generatedPathZip);
-      fs.rmSync(generatedPath, { recursive: true, force: true });
+      //fs.rmSync(generatedPathZip);
+      //fs.rmSync(generatedPath, { recursive: true, force: true });
       break;
     case assetTypes.FAVICON.name:
       await generateFavicons(options);

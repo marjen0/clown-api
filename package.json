@@ -13,9 +13,9 @@
   "author": "Marijus Jenulis",
   "license": "ISC",
   "dependencies": {
-    "@marijus/clown-cli": "^1.0.0",
     "archiver": "^5.2.0",
     "chalk": "^4.1.0",
+    "clown": "git+https://github.com/marjen0/clown-cli.git",
     "commander": "^7.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
