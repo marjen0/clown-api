@@ -74,14 +74,23 @@ const download = (res, filePath) =>
 
 router.post('/', upload.single('image'), async (req, res) => {
   const { type } = req.query;
-  const generatedPathZip = `/Users/marijus/Documents/clown-api/outputs${type}.zip`;
-  const generatedPath = `/Users/marijus/Documents/clown-api/outputs/${type}`;
+
+  const uniqueOutputDir = path.join(
+    __dirname,
+    '../../outputs',
+    req.file.filename
+  );
+  fs.mkdirSync(uniqueOutputDir);
+
+  const generatedPathZip = `${uniqueOutputDir}/${type}.zip`;
+  const generatedPath = `${uniqueOutputDir}/${req.file.filename}/${type}`;
+
   const options = {
     source: req.file.path,
-    output: path.join(__dirname, '../../outputs'),
+    output: path.join(__dirname, '../../outputs/', req.file.filename),
     platforms: [platforms.ANDROID, platforms.IOS, platforms.ANDROIDTV],
   };
-  console.log(req);
+  //console.log(req);
   switch (type) {
     case assetTypes.SPLASHSCREEN.name:
       await generateSplashScreens(options);
@@ -89,7 +98,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       await download(res, generatedPathZip);
       //fs.rmSync(generatedPathZip);
       //fs.rmSync(generatedPath, { recursive: true, force: true });
-      fs.rmSync(req.file.path);
+      fs.rmSync(req.file.path, { force: true });
       break;
     case assetTypes.LAUNCHICON.name:
       await generateLaunchIcons(options);
@@ -97,6 +106,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       await download(res, generatedPathZip);
       // fs.rmSync(generatedPathZip);
       // fs.rmSync(generatedPath, { recursive: true, force: true });
+      fs.rmSync(req.file.path, { force: true });
       break;
     case assetTypes.FAVICON.name:
       await generateFavicons(options);
@@ -104,6 +114,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       await download(res, generatedPathZip);
       //fs.rmSync(generatedPathZip);
       //fs.rmSync(generatedPath, { recursive: true, force: true });
+      fs.rmSync(req.file.path, { force: true });
       break;
     default:
       res.status(400).json({ error: 'bad asset type' });
