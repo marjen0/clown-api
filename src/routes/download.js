@@ -14,14 +14,13 @@ const archiver = require('archiver');
 
 const router = express.Router({ mergeParams: true });
 
-const DIR = '../../public';
+const DIR = path.join(__dirname, '../../uploads');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, DIR);
   },
   filename: (req, file, cb) => {
-    console.log('here');
     const fileName = file.originalname.toLowerCase().split(' ').join('-');
     cb(null, `${uuidv4()} + '-' + ${fileName}`);
   },
