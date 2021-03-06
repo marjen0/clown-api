@@ -74,6 +74,7 @@ const download = (res, filePath) =>
 
 router.post('/', upload.single('image'), async (req, res) => {
   const { type } = req.query;
+  const targetedPlatforms = JSON.parse(req.body.platforms);
 
   const uniqueOutputDir = path.join(
     __dirname,
@@ -81,16 +82,15 @@ router.post('/', upload.single('image'), async (req, res) => {
     req.file.filename
   );
   fs.mkdirSync(uniqueOutputDir);
-
   const generatedPathZip = `${uniqueOutputDir}/${type}.zip`;
-  const generatedPath = `${uniqueOutputDir}/${req.file.filename}/${type}`;
+  const generatedPath = `${uniqueOutputDir}/${type}`;
 
   const options = {
-    source: req.file.path,
-    output: path.join(__dirname, '../../outputs/', req.file.filename),
-    platforms: [platforms.ANDROID, platforms.IOS, platforms.ANDROIDTV],
+    source: path.join(__dirname, `../../uploads/${req.file.filename}`),
+    output: uniqueOutputDir,
+    platforms: targetedPlatforms,
   };
-  //console.log(req);
+
   switch (type) {
     case assetTypes.SPLASHSCREEN.name:
       await generateSplashScreens(options);
@@ -98,7 +98,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       await download(res, generatedPathZip);
       //fs.rmSync(generatedPathZip);
       //fs.rmSync(generatedPath, { recursive: true, force: true });
-      fs.rmSync(req.file.path, { force: true });
+      fs.rmSync(req.file.path);
       break;
     case assetTypes.LAUNCHICON.name:
       await generateLaunchIcons(options);
@@ -106,7 +106,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       await download(res, generatedPathZip);
       // fs.rmSync(generatedPathZip);
       // fs.rmSync(generatedPath, { recursive: true, force: true });
-      fs.rmSync(req.file.path, { force: true });
+      fs.rmSync(req.file.path);
       break;
     case assetTypes.FAVICON.name:
       await generateFavicons(options);
@@ -114,7 +114,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       await download(res, generatedPathZip);
       //fs.rmSync(generatedPathZip);
       //fs.rmSync(generatedPath, { recursive: true, force: true });
-      fs.rmSync(req.file.path, { force: true });
+      fs.rmSync(req.file.path);
       break;
     default:
       res.status(400).json({ error: 'bad asset type' });

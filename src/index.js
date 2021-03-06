@@ -8,12 +8,16 @@ const PORT = process.env.PORT || 5000;
 app.use(express.static(__dirname));
 
 app.use(cors());
-app.use(express());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+//  Allow form-data parsing
 
-app.use((err, req, res, next) => {
+app.use(express.static('public'));
+
+/*app.use((err, req, res, next) => {
   console.error(err.message);
   res.status(err.statusCode).send(err.message);
-});
+});*/
 
 app.use('/download', downloadRoutes);
 
