@@ -19,7 +19,7 @@ app.use(express.static('public'));
   res.status(err.statusCode).send(err.message);
 });*/
 
-app.use('/download', downloadRoutes);
+app.use('/api/download', downloadRoutes);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
