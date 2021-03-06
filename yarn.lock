@@ -3588,7 +3588,7 @@ clone@^1.0.2:
 
 "clown@git+https://github.com/marjen0/clown-cli.git":
   version "1.0.0"
-  resolved "git+https://github.com/marjen0/clown-cli.git#263a6b377d25ec03113104d0c217ddaaf948904e"
+  resolved "git+https://github.com/marjen0/clown-cli.git#4a2385d0a844728085aab675be3af62bb1d8fb04"
   dependencies:
     archiver "^5.2.0"
     chalk "^4.1.0"

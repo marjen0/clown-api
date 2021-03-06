@@ -8,7 +8,6 @@ const {
   generateSplashScreens,
   generateFavicons,
   assetTypes,
-  platforms,
 } = require('clown');
 const archiver = require('archiver');
 
@@ -43,7 +42,7 @@ const upload = multer({
 
 const zipDirectory = async (source, dest) => {
   const stream = fs.createWriteStream(dest);
-  const archive = archiver('zip', { zlib: { level: 9 } });
+  const archive = archiver('zip');
   archive.on('error', (err) => {
     throw err;
   });
@@ -96,24 +95,21 @@ router.post('/', upload.single('image'), async (req, res) => {
       await generateSplashScreens(options);
       await zipDirectory(generatedPath, generatedPathZip);
       await download(res, generatedPathZip);
-      //fs.rmSync(generatedPathZip);
-      //fs.rmSync(generatedPath, { recursive: true, force: true });
+      fs.rmSync(uniqueOutputDir, { recursive: true, force: true });
       fs.rmSync(req.file.path);
       break;
     case assetTypes.LAUNCHICON.name:
       await generateLaunchIcons(options);
       await zipDirectory(generatedPath, generatedPathZip);
       await download(res, generatedPathZip);
-      // fs.rmSync(generatedPathZip);
-      // fs.rmSync(generatedPath, { recursive: true, force: true });
+      fs.rmSync(uniqueOutputDir, { recursive: true, force: true });
       fs.rmSync(req.file.path);
       break;
     case assetTypes.FAVICON.name:
       await generateFavicons(options);
       await zipDirectory(generatedPath, generatedPathZip);
       await download(res, generatedPathZip);
-      //fs.rmSync(generatedPathZip);
-      //fs.rmSync(generatedPath, { recursive: true, force: true });
+      fs.rmSync(uniqueOutputDir, { recursive: true, force: true });
       fs.rmSync(req.file.path);
       break;
     default:
