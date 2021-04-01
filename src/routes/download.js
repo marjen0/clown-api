@@ -8,6 +8,8 @@ const {
   generateSplashScreens,
   generateFavicons,
   assetTypes,
+  generateAllAssets,
+  generateNotificationIcon,
 } = require('clown');
 const archiver = require('archiver');
 
@@ -71,24 +73,34 @@ const download = (res, filePath) =>
     });
   });
 
+const createOutputDir = (filename) => {
+  const uniqueOutputDir = path.join(__dirname, '../../outputs', filename);
+  fs.mkdirSync(uniqueOutputDir);
+
+  return uniqueOutputDir;
+};
+
+const getOptions = (filename, outputDir, platforms) => {
+  const options = {
+    source: path.join(__dirname, `../../uploads/${filename}`),
+    output: outputDir,
+    platforms,
+  };
+
+  return options;
+};
+
 router.post('/', upload.single('image'), async (req, res) => {
   const { type } = req.query;
   const targetedPlatforms = JSON.parse(req.body.platforms);
-
-  const uniqueOutputDir = path.join(
-    __dirname,
-    '../../outputs',
-    req.file.filename
-  );
-  fs.mkdirSync(uniqueOutputDir);
+  const uniqueOutputDir = createOutputDir(req.file.filename);
   const generatedPathZip = `${uniqueOutputDir}/${type}.zip`;
   const generatedPath = `${uniqueOutputDir}/${type}`;
-
-  const options = {
-    source: path.join(__dirname, `../../uploads/${req.file.filename}`),
-    output: uniqueOutputDir,
-    platforms: targetedPlatforms,
-  };
+  const options = getOptions(
+    req.file.filename,
+    uniqueOutputDir,
+    targetedPlatforms
+  );
 
   switch (type) {
     case assetTypes.SPLASHSCREEN.name:
@@ -112,6 +124,21 @@ router.post('/', upload.single('image'), async (req, res) => {
       fs.rmSync(uniqueOutputDir, { recursive: true, force: true });
       fs.rmSync(req.file.path);
       break;
+    case assetTypes.NOTIFICATIONICON.name:
+      await generateNotificationIcon(options);
+      await zipDirectory(generatedPath, generatedPathZip);
+      await download(res, generatedPathZip);
+      fs.rmSync(uniqueOutputDir, { recursive: true, force: true });
+      fs.rmSync(req.file.path);
+      break;
+    case assetTypes.ALL.name:
+      await generateAllAssets(options);
+      await zipDirectory(generatedPath, generatedPathZip);
+      await download(res, generatedPathZip);
+      fs.rmSync(uniqueOutputDir, { recursive: true, force: true });
+      fs.rmSync(req.file.path);
+      break;
+
     default:
       res.status(400).json({ error: 'bad asset type' });
       break;

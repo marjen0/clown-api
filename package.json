@@ -8,14 +8,16 @@
   "private": true,
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "npx nodemon src/index.js"
   },
   "author": "Marijus Jenulis",
   "license": "ISC",
   "dependencies": {
     "archiver": "^5.2.0",
     "chalk": "^4.1.0",
-    "clown": "git+https://github.com/marjen0/clown-cli.git",
+    "clown": "git+https://github.com/marjen0/clown-cli.git#main",
     "commander": "^7.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
