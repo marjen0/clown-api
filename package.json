@@ -9,7 +9,7 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js",
+    "start": "node src/index.js NODE_ENV=develop",
     "dev": "npx nodemon src/index.js"
   },
   "author": "Marijus Jenulis",

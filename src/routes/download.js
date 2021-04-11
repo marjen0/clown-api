@@ -4,12 +4,12 @@ const express = require('express');
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const {
-  generateLaunchIcons,
-  generateSplashScreens,
-  generateFavicons,
+  AssetsGenerator,
+  FaviconGenerator,
+  IconGenerator,
+  NotificationGenerator,
+  SplashGenerator,
   assetTypes,
-  generateAllAssets,
-  generateNotificationIcon,
 } = require('clown');
 const archiver = require('archiver');
 
@@ -63,15 +63,15 @@ const zipDirectory = async (source, dest) => {
 
 const download = (res, filePath) =>
   new Promise((resolve) => {
-    res.download(filePath, (err) => {
-      if (err) {
-        return res.status(500).json({
-          message: `Could not download the file. ${err}`,
-        });
-      }
-      resolve();
-    });
+  res.download(filePath, (err) => {
+    if (err) {
+      return res.status(500).json({
+        message: `Could not download the file. ${err}`,
+      });
+    }
+    resolve();
   });
+});
 
 const createOutputDir = (filename) => {
   const uniqueOutputDir = path.join(__dirname, '../../outputs', filename);
@@ -101,38 +101,43 @@ router.post('/', upload.single('image'), async (req, res) => {
     uniqueOutputDir,
     targetedPlatforms
   );
-
+  
+  const splashGenerator = new SplashGenerator(options);
+  const notificationGenerator = new NotificationGenerator(options);
+  const faviconGenerator = new FaviconGenerator(options);
+  const iconGenerator = new IconGenerator(options);
+  const assetsGenerator = new AssetsGenerator(options)
   switch (type) {
     case assetTypes.SPLASHSCREEN.name:
-      await generateSplashScreens(options);
+      await splashGenerator.generateSplashScreensAsync();
       await zipDirectory(generatedPath, generatedPathZip);
       await download(res, generatedPathZip);
       fs.rmSync(uniqueOutputDir, { recursive: true, force: true });
       fs.rmSync(req.file.path);
       break;
     case assetTypes.LAUNCHICON.name:
-      await generateLaunchIcons(options);
+      await iconGenerator.generateLaunchIconsAsync();
       await zipDirectory(generatedPath, generatedPathZip);
       await download(res, generatedPathZip);
       fs.rmSync(uniqueOutputDir, { recursive: true, force: true });
       fs.rmSync(req.file.path);
       break;
     case assetTypes.FAVICON.name:
-      await generateFavicons(options);
+      await faviconGenerator.generateFaviconsAsync();
       await zipDirectory(generatedPath, generatedPathZip);
       await download(res, generatedPathZip);
       fs.rmSync(uniqueOutputDir, { recursive: true, force: true });
       fs.rmSync(req.file.path);
       break;
     case assetTypes.NOTIFICATIONICON.name:
-      await generateNotificationIcon(options);
+      await notificationGenerator.generateNotificationIcon();
       await zipDirectory(generatedPath, generatedPathZip);
       await download(res, generatedPathZip);
       fs.rmSync(uniqueOutputDir, { recursive: true, force: true });
       fs.rmSync(req.file.path);
       break;
     case assetTypes.ALL.name:
-      await generateAllAssets(options);
+      await assetsGenerator.generateAllAssetsAsync();
       await zipDirectory(generatedPath, generatedPathZip);
       await download(res, generatedPathZip);
       fs.rmSync(uniqueOutputDir, { recursive: true, force: true });
