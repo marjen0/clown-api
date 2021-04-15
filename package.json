@@ -21,7 +21,7 @@
   "dependencies": {
     "archiver": "^5.2.0",
     "chalk": "^4.1.0",
-    "clowngen": "^1.0.1",
+    "clowngen": "^1.0.4",
     "commander": "^7.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
