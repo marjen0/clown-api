@@ -9,8 +9,8 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js NODE_ENV=develop",
-    "dev": "npx nodemon src/index.js"
+    "start": "node src/index.js",
+    "dev": "npm start src/index.js NODE_ENV=develop"
   },
   "engines": {
     "node": ">=10.0.0",
