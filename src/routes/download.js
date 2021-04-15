@@ -10,7 +10,7 @@ const {
   NotificationGenerator,
   SplashGenerator,
   assetTypes,
-} = require('clown');
+} = require('clowngen');
 const archiver = require('archiver');
 
 const router = express.Router({ mergeParams: true });
@@ -101,12 +101,12 @@ router.post('/', upload.single('image'), async (req, res) => {
     uniqueOutputDir,
     targetedPlatforms
   );
-  
+
   const splashGenerator = new SplashGenerator(options);
   const notificationGenerator = new NotificationGenerator(options);
   const faviconGenerator = new FaviconGenerator(options);
   const iconGenerator = new IconGenerator(options);
-  const assetsGenerator = new AssetsGenerator(options)
+  const assetsGenerator = new AssetsGenerator(options);
   switch (type) {
     case assetTypes.SPLASHSCREEN.name:
       await splashGenerator.generateSplashScreensAsync();

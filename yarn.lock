@@ -3630,9 +3630,10 @@ clone@^1.0.2:
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
   integrity sha1-2jCcwmPfFZlMaIypAheco8fNfH4=
 
-"clown@git+https://github.com/marjen0/clown-cli.git#main":
-  version "1.0.0"
-  resolved "git+https://github.com/marjen0/clown-cli.git#3e93dc774f84da1dca9ac243cf3e4fdc7d28a64e"
+clowngen@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/clowngen/-/clowngen-1.0.1.tgz#650544ecae794b4c0d00fb625fbfe6c50edd9576"
+  integrity sha512-/7zD8T0bm3xolvzwQ0vmqdCdaZ7Gcf3A34+Iy5TkJk4/qS5UvyuQ80DDJOphxPP9trmYKcRx7nUdrMxz5y0rYQ==
   dependencies:
     "@types/jest" "^26.0.20"
     archiver "^5.2.0"
