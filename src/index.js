@@ -8,7 +8,8 @@ const PORT = process.env.PORT || 5000;
 app.use(express.static(__dirname));
 
 const whitelist = ['http://0.0.0.0:8080', 'https://clown-client.vercel.app'];
-app.use(
+app.use(cors());
+/*app.use(
   cors({
     origin(origin, callback) {
       if (whitelist.indexOf(origin) !== -1) {
@@ -17,8 +18,8 @@ app.use(
         callback(new Error('Not allowed by CORS'));
       }
     },
-  }),
-);
+  })
+);*/
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
